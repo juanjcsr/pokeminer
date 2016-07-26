@@ -36,6 +36,7 @@ class Sighting(Base):
     normalized_timestamp = Column(Integer)
     lat = Column(String(16))
     lon = Column(String(16))
+    observed_timestamp = Column(Integer)
 
 
 Session = sessionmaker(bind=get_engine())
@@ -51,8 +52,9 @@ def add_sighting(session, spawn_id, pokemon):
         spawn_id=spawn_id,
         expire_timestamp=pokemon['disappear_time'],
         normalized_timestamp=normalize_timestamp(pokemon['disappear_time']),
-        lat=pokemon['lat'],
-        lon=pokemon['lng'],
+        lat=str(pokemon['lat']),
+        lon=str(pokemon['lng']),
+        observed_timestamp=int(time.time()),
     )
     # Check if there isn't the same entry already
     existing = session.query(Sighting) \
